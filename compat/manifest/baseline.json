@@ -1,0 +1,21 @@
+{
+  "upstream": {
+    "url": "https://github.com/genspark-ai/genoffice.git",
+    "branch": "main",
+    "commit": "99865c27f685f1e7f40d6df273545db8ea86aa17",
+    "tag": "win7/upstream-baseline-2026-11-24"
+  },
+  "target": "Windows 7 SP1 x64",
+  "runtime": {
+    "electron": "43.8.10",
+    "chromium": "150.0.7871.250",
+    "node": "24.22.1",
+    "electronBuilder": "26.15.3",
+    "jsdom": "28.1.0"
+  },
+  "lockfilesSha256": {
+    "package-lock.json": "4a6e0a092ca6449992e7f203c6beaa9121a305dda33a016eafc523ddbd69d6e6",
+    "apps/sheets/native/xlsx-engine/Cargo.lock": "61bce5c8a94ecdb160e4ea61aee6cb59dfccc7a19a1f573b153bb4e9bd3bfc6c",
+    "apps/sheets/native/win-clipboard-helper/Cargo.lock": "deacbf4ee024220d5cabb0dad2d1ece8c16d9592048ff82e3d495a8326a4e06e"
+  }
+}
