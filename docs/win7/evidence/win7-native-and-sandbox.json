@@ -1,0 +1,112 @@
+{
+  "upstreamSha": "99865c27f685f1e7f40d6df273545db8ea86aa17",
+  "guest": "Windows 7 Ultimate SP1 x64 6.1.7601",
+  "desktop": {
+    "testId": "RT01",
+    "status": "fail",
+    "electron": "43.8.10",
+    "vxKex": "1.2.2.2316",
+    "sandbox": "default",
+    "tracedImage": "PE version diagnostic copy",
+    "debugId": "C6EC6D699830A5C64C4C44205044422E1",
+    "symbolsZipSha256": "0b35ca71caa10b357171c52aec3979a6d897b0ecec96bdb37da2e4b7af2fb187",
+    "firstException": "0xC0000005",
+    "access": "execute",
+    "faultAddress": "0xFFFFFFFFFFFFFFFF",
+    "statusArgument": "0xC0000035",
+    "exit": "0xFFFF7003",
+    "frames": [
+      {
+        "rva": "0x0126D92B",
+        "function": "sandbox::InterceptionManager::PatchClientFunctions",
+        "source": "interception.cc:414"
+      },
+      {
+        "rva": "0x0126D1FD",
+        "function": "sandbox::InterceptionManager::PatchNtdll",
+        "source": "interception.cc:357"
+      },
+      {
+        "rva": "0x0335D70D",
+        "function": "sandbox::InterceptionManager::InitializeInterceptions",
+        "source": "interception.cc:132"
+      },
+      {
+        "rva": "0x0126CA1A",
+        "function": "sandbox::PolicyBase::SetupAllInterceptions"
+      }
+    ]
+  },
+  "native": {
+    "target": "x86_64-win7-windows-msvc",
+    "toolchain": "nightly-2026-03-26",
+    "rustc": "1.96.0-nightly (80d0e4be6 2026-03-25)",
+    "staticCrt": true,
+    "sidecarSha256": "c0951b743a95efb5239cac1ac073314ce848da9c6b9048f6ef30ac0f4e1f7209",
+    "clipboardHelperSha256": "fa075a97161e54f758262809d2db938aef467b79fa43c9602d1e71e783e094a1",
+    "direct": {
+      "environment": "patched guest without VxKex",
+      "sidecar": {
+        "operation": "open",
+        "protocol": 1,
+        "ok": true,
+        "exit": 0,
+        "worksheet": "Sheet1",
+        "status": "pass"
+      },
+      "clipboard": {
+        "emfBefore": false,
+        "emfAfter": true,
+        "textPreserved": true,
+        "exit": 0,
+        "status": "pass"
+      }
+    }
+  },
+  "workbook": {
+    "environment": "VxKex loader with Electron RunAsNode",
+    "valueRoundtrip": {
+      "cell": "B2",
+      "value": 4321,
+      "originalUnchanged": true,
+      "status": "pass"
+    },
+    "formulaControl": {
+      "fixtureSha256": "d7972242c2ef2c42c17c8f77bfcfb4f9de802ef5160b9e5ae11a1fa361996548",
+      "outputSha256": "5d6de1a9071ebc6edddeb5d5fe80b2e4f83179e653cebf64debb2e8d328e5f56",
+      "formula": "=B2*2",
+      "rows": [[4321, 8642]],
+      "exitCodes": [0, 0, 0],
+      "originalUnchanged": true,
+      "changedParts": ["xl/workbook.xml", "xl/worksheets/sheet1.xml"],
+      "integrityOk": true,
+      "status": "pass"
+    },
+    "missingStyles": {
+      "fixtureSha256": "c6e717d127cbe9bb6f22c201213e655dd72713ddf14074a7235ff7d454155552",
+      "readBackExit": 3,
+      "modernWindowsReproducedWithOriginalSidecar": true,
+      "importer": "ironcalc 0.9.1 styles.rs:309",
+      "status": "fail"
+    }
+  },
+  "mcpHttp": {
+    "testId": "T11",
+    "endpoint": "guest loopback",
+    "client": "Windows .NET HttpWebRequest",
+    "anonymousStatus": 401,
+    "initializeStatus": 200,
+    "initializedNotificationStatus": 202,
+    "toolsListStatus": 200,
+    "sheetReadDiscovered": true,
+    "uploadedXlsxInfoStatus": 200,
+    "uploadedXlsxWorksheet": "Sheet1",
+    "serverStatus": "pass",
+    "embeddedNodeFetch": {
+      "status": "fail",
+      "error": "connect UNKNOWN",
+      "listenerConfirmed": true
+    },
+    "stdioStatus": "not-run"
+  }
+}
