@@ -1,0 +1,118 @@
+{
+  "date": "2026-11-24",
+  "upstreamSha": "99865c27f685f1e7f40d6df273545db8ea86aa17",
+  "guest": {
+    "os": "Windows 7 Ultimate SP1",
+    "build": "6.1.7601",
+    "arch": "x64",
+    "snapshot": "Separate Docker named volumes cloned after ACPI shutdown"
+  },
+  "electron": {
+    "version": "43.8.10",
+    "sha256": "0fafe52005be7e9fa67b5e068d57b38abd63ce24abdaa897113a0c3764f8a363"
+  },
+  "updates": [
+    {
+      "kb": "KB4490628",
+      "wusa": 0,
+      "confirmedAfterReboot": true,
+      "sha256": "8075f6d889bcb27be6f52ed47081675e5bb8a5390f2f5bfe4ec27a2bb70cbf5e"
+    },
+    {
+      "kb": "KB4474419 v3",
+      "wusa": 3010,
+      "confirmedAfterReboot": true,
+      "sha256": "99312df792b376f02e25607d2eb3355725c47d124d8da253193195515fe90213"
+    },
+    {
+      "kb": "KB2670838",
+      "wusa": 3010,
+      "confirmedAfterReboot": true,
+      "sha256": "9fe71e7dcd2280ce323880b075ade6e56c49b68fc702a9b4c0a635f0f1fb9db8"
+    },
+    {
+      "kb": "KB2533623",
+      "wusa": "0x80240017",
+      "attemptedOn": "VxKex guest",
+      "dllDirectoryExports": ["AddDllDirectory", "SetDefaultDllDirectories"],
+      "sha256": "58b8b00113fa8b9657d8da5b14bae93f765f29651c81055e3d127d4a22e5c0d6"
+    }
+  ],
+  "vxkex": {
+    "release": "https://github.com/i486/VxKex/releases/tag/Version1.2.2.2316",
+    "variant": "Release CI",
+    "sha256": "fee6db142edd2d885fe96c200ccf226301fc42a4324747311df4bd34dd7e331f",
+    "installerExit": 0,
+    "configurationExit": 0,
+    "scope": "Full path of the test electron.exe",
+    "childProcesses": true,
+    "windowsVersionReport": "WIN10",
+    "applicationSpecificFixes": false
+  },
+  "results": [
+    {
+      "testId": "RT01",
+      "caseId": "patched-direct",
+      "status": "fail",
+      "probeJson": false,
+      "message": "The specified executable is not a valid Win32 application."
+    },
+    {
+      "testId": "RT01",
+      "caseId": "vxkex-direct",
+      "status": "fail",
+      "probeJson": false,
+      "win32Error": 193
+    },
+    {
+      "testId": "RT01",
+      "caseId": "vxkex-loader-desktop",
+      "status": "fail",
+      "probeJson": false,
+      "electronObserved": true,
+      "electronExit": "0xFFFF7003",
+      "loggedSymptom": "crashpad_client_win.cc:867 not connected"
+    },
+    {
+      "testId": "RT01",
+      "caseId": "vxkex-loader-desktop-reboot",
+      "status": "fail",
+      "probeJson": false,
+      "electronObserved": true,
+      "electronExit": "0x00000001"
+    },
+    {
+      "testId": "RT02",
+      "caseId": "vxkex-run-as-node-sqlite",
+      "status": "pass",
+      "node": "24.22.1",
+      "sqlite": "3.53.4",
+      "selectOneResult": 1,
+      "repeatedAfterReboot": true
+    },
+    {
+      "testId": "T10",
+      "caseId": "cli-info-docx",
+      "status": "pass",
+      "exitCode": 0,
+      "blocks": 4,
+      "fixtureSha256": "3c4c44595422ae486c85307f6cbc6bb2c1bad439577cd608dce93c32ab87b442"
+    },
+    {
+      "testId": "T10",
+      "caseId": "cli-info-pptx",
+      "status": "pass",
+      "exitCode": 0,
+      "slides": 5,
+      "fixtureSha256": "faddc03270215218e78720f1c8f6e3aa862891a432f71e7ec9f3d13ea7902048"
+    },
+    {
+      "testId": "T10",
+      "caseId": "cli-info-xlsx",
+      "status": "blocked",
+      "exitCode": 3,
+      "message": "xlsx engine (xlsx-sidecar) not found",
+      "fixtureSha256": "c6e717d127cbe9bb6f22c201213e655dd72713ddf14074a7235ff7d454155552"
+    }
+  ]
+}
