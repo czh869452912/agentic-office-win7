@@ -1,0 +1,168 @@
+{
+  "runAt": "2026-11-24T11:15:33.164Z",
+  "scope": "upstream-render-smoke",
+  "comparison": "A",
+  "profile": "upstream",
+  "upstreamSha": "99865c27f685f1e7f40d6df273545db8ea86aa17",
+  "osBuild": "10.0.26300",
+  "platform": "win32",
+  "arch": "x64",
+  "electron": "43.8.10",
+  "runtimeSha256": "0fafe52005be7e9fa67b5e068d57b38abd63ce24abdaa897113a0c3764f8a363",
+  "results": [
+    {
+      "testId": "T08",
+      "caseId": "docx",
+      "fixture": "fixtures/generated/simple.docx",
+      "fixtureSha256": "3c4c44595422ae486c85307f6cbc6bb2c1bad439577cd608dce93c32ab87b442",
+      "durationMs": 3653,
+      "exitCode": 0,
+      "status": "pass",
+      "remainingPdf": 0,
+      "renderedPages": 1,
+      "outputs": [
+        {
+          "file": "simple-01.png",
+          "width": 596,
+          "height": 842,
+          "sha256": "7ea1ac9dc6041022902396ff64b99a521fb051b2fe56ec8fe12dc42c4e602cbd"
+        },
+        {
+          "file": "simple-grid.png",
+          "width": 1320,
+          "height": 468,
+          "sha256": "ffe734a9bcc36ca89efe6396da4e2e51420e1649bb6d5c1b5bbcc2791c79f652"
+        }
+      ]
+    },
+    {
+      "testId": "T08",
+      "caseId": "xlsx",
+      "fixture": "apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+      "fixtureSha256": "c6e717d127cbe9bb6f22c201213e655dd72713ddf14074a7235ff7d454155552",
+      "durationMs": 2414,
+      "exitCode": 0,
+      "status": "pass",
+      "remainingPdf": 0,
+      "renderedPages": 1,
+      "outputs": [
+        {
+          "file": "compatibility-basic-01.png",
+          "width": 595,
+          "height": 842,
+          "sha256": "9ac4d237fea53bd25ea5c994647fff3d838d564b4089f41ba9bc51f646efca3c"
+        },
+        {
+          "file": "compatibility-basic-grid.png",
+          "width": 1320,
+          "height": 469,
+          "sha256": "48ef7c4a428733f46fa0df27cb8d4d3d2ef2b3d848ff365d6ffeaa09ca29143a"
+        }
+      ]
+    },
+    {
+      "testId": "T08",
+      "caseId": "pptx",
+      "fixture": "packages/pptx-engine/tests/fixtures/01_standard_business.pptx",
+      "fixtureSha256": "faddc03270215218e78720f1c8f6e3aa862891a432f71e7ec9f3d13ea7902048",
+      "durationMs": 1793,
+      "exitCode": 0,
+      "status": "pass",
+      "remainingPdf": 0,
+      "renderedPages": 5,
+      "outputs": [
+        {
+          "file": "01_standard_business-01.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "2e18689cc2e31d82cbde69d53ea292bd03f856985b156fa624014ae5fea799d1"
+        },
+        {
+          "file": "01_standard_business-02.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "2dc19f60eb0035987b35aa6cfb860946adb71861b6ce73f364cdd779ec4bc420"
+        },
+        {
+          "file": "01_standard_business-03.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "cb423e4be83db709de32761803a0f82992afdf91cbb60661f2468bd6e5f6be50"
+        },
+        {
+          "file": "01_standard_business-04.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "6bf5e675050c545dc904e31b1c0a87106fe61893240ac6971f482232f22c3a52"
+        },
+        {
+          "file": "01_standard_business-05.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "71072f5f5351e1b2989d86b73bb84b6336085daa524496874e089292e6cf047c"
+        },
+        {
+          "file": "01_standard_business-grid.png",
+          "width": 1320,
+          "height": 384,
+          "sha256": "a4cd8cfb2e959b1df49bdca3be960da00da20255d94cabb17a39fed0fd2a30a9"
+        }
+      ]
+    },
+    {
+      "testId": "T08",
+      "caseId": "slides",
+      "fixture": "packages/pptx-engine/tests/fixtures/01_standard_business.pptx",
+      "fixtureSha256": "faddc03270215218e78720f1c8f6e3aa862891a432f71e7ec9f3d13ea7902048",
+      "durationMs": 1918,
+      "exitCode": 0,
+      "status": "pass",
+      "remainingPdf": 0,
+      "renderedPages": 5,
+      "outputs": [
+        {
+          "file": "01_standard_business-01.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "2e18689cc2e31d82cbde69d53ea292bd03f856985b156fa624014ae5fea799d1"
+        },
+        {
+          "file": "01_standard_business-02.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "2dc19f60eb0035987b35aa6cfb860946adb71861b6ce73f364cdd779ec4bc420"
+        },
+        {
+          "file": "01_standard_business-03.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "cb423e4be83db709de32761803a0f82992afdf91cbb60661f2468bd6e5f6be50"
+        },
+        {
+          "file": "01_standard_business-04.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "6bf5e675050c545dc904e31b1c0a87106fe61893240ac6971f482232f22c3a52"
+        },
+        {
+          "file": "01_standard_business-05.png",
+          "width": 960,
+          "height": 540,
+          "sha256": "71072f5f5351e1b2989d86b73bb84b6336085daa524496874e089292e6cf047c"
+        }
+      ]
+    },
+    {
+      "testId": "T08",
+      "caseId": "invalid-page",
+      "fixture": "fixtures/generated/simple.docx",
+      "fixtureSha256": "3c4c44595422ae486c85307f6cbc6bb2c1bad439577cd608dce93c32ab87b442",
+      "durationMs": 3554,
+      "exitCode": 1,
+      "status": "pass",
+      "remainingPdf": 0,
+      "outputs": [],
+      "rejection": "page-out-of-range"
+    }
+  ]
+}

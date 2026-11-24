@@ -9,6 +9,8 @@
 
 <h1 align="center">GenOffice</h1>
 
+<p align="center"><a href="docs/win7/README.md">Win7 兼容项目 · 实施计划与验收</a></p>
+
 <p align="center"><b>The world's first full-featured open-source AI Office suite.</b><br>
 Word, Excel, PowerPoint and PDF files, edited by you and your AI, saved back in the real formats.</p>
 

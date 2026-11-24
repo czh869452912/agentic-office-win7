@@ -1,20 +1,20 @@
-# GenOffice Win7 实施状态
+# GenOffice Win7 实施台账
 
-基线为 `99865c27f685f1e7f40d6df273545db8ea86aa17`，适配分支为 `win7/main`。对应的 Git 标签和锁文件校验值见 [基线清单](../../compat/manifest/baseline.json)。
+适配分支为 `win7/main`，本轮上游基线为 `99865c27f685f1e7f40d6df273545db8ea86aa17`。版本与锁文件哈希见 [基线清单](../../compat/manifest/baseline.json)，需求及门禁见 [项目索引](README.md)。
 
-| 任务                    | 状态                                       | 证据或前置依赖                                                                                                                                                           |
-| ----------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| W00 基线冻结            | 已锁定源码和三个锁文件。                   | 对齐上游 `main`，在 Windows x64 `10.0.26300` 上用 Node `22.21.0` 和 npm `10.9.4` 执行 `npm ci --no-audit --no-fund` 成功。源码入口见 [首轮方案评审](upstream-audit.md)。 |
-| W01 Electron 探针       | 现代 Windows 初版探针通过，Win7 尚未执行。 | 官方 Electron `43.8.10` 返回退出码 0，JSON 中 5 项均为 `pass`。检查范围和运行方法见 [探针说明](runtime-test.md)。需要 Win7 SP1 x64 VM 或实机完成对照。                   |
-| W02 PDF profile         | 尚未实施。                                 | 待验证真实 Office 文档到 PNG 的路径、共享资源和公开调用边界。                                                                                                            |
-| W03 Win7 原生组件       | 尚未实施。                                 | 待验证固定 Rust 工具链、Win7 target 构建、PE 导入和实机行为。                                                                                                            |
-| W04 CLI、MCP 与内网模型 | 尚未实施。                                 | 待完成命令、工具及参数级基线清单与契约测试。                                                                                                                             |
-| W05 运行时路线决策      | 尚未形成。                                 | 需要 Win7 探针和运行时完整门禁的结果。                                                                                                                                   |
-| W06 离线交付与验收      | 尚未实施。                                 | 依赖运行时、profile、原生组件和集成结果。                                                                                                                                |
+| 工作项                  | 阶段   | 状态                             | 依赖与下一项可验证交付                                                                                                        |
+| ----------------------- | ------ | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| W00 基线冻结            | P0     | 源码已锁定，A 组对照进行中       | 原版构建通过，T08 渲染子用例已留证。继续核对参数级能力和原版 Windows CLI 差异。                                               |
+| W01 Electron 探针       | P1     | 现代 Windows 初版通过，Win7 待测 | 依赖 Win7 SP1 x64 VM 或实机。按 RT01–RT09 检查原版运行时与候选配置，记录首个失败点。[探针](runtime-test.md)                   |
+| W02 PDF profile         | P2     | 实施评估中                       | A 组 T08 渲染子用例已通过。先验证内部 PNG 请求，再实现面向 T08、T13–T15 的 B 组切片。[实施评估](implementation-assessment.md) |
+| W03 Win7 原生组件       | P3     | 待验证                           | 固定 Rust nightly 和 Win7 target，验证 Sidecar 与 EMF Helper 构建、PE 导入，再跑 T04、T16 的实机用例。                        |
+| W04 CLI、MCP 与内网模型 | P3、P5 | 待补对照                         | 先记录原版 CLI/MCP 命令和契约，待 B 组候选构建后比较 T09–T12、T15。                                                           |
+| W05 运行时路线决策      | P1、P4 | 待实机证据                       | 依赖 W01。根据实测决定是否进入兼容层、局部补丁或源码构建，并记录决策和退出条件。                                              |
+| W06 离线交付与验收      | P5、P6 | 待集成                           | 依赖 W01–W05 的候选结果。验证 B/C 安装包及支持矩阵，执行 T01–T19 并发出验收报告。                                             |
 
-## 现代 Windows 基线验证
+## 已有证据
 
-- `npm run build:all` 成功，包含 XLSX Sidecar 和 EMF Helper 的主机构建。CLI 构建产物能输出版本和帮助。未生成安装包。
-- 上游 CLI 全套测试首次运行得到 536 通过、30 失败、25 跳过，另有一条命名管道占用异常。可见的失败包括路径断言、符号链接权限、MCP 超时和缺少生成的 XLSX 测试样本。
-- 执行 `npm run fixtures -w @genoffice/sheets` 后，重跑 `tests/cli.test.ts` 和 `tests/errors.test.ts`，18 项全部通过。其余失败仍需复核。上游 CI 当前运行于 Ubuntu，Windows 回归需单独记录。[上游 CI 配置](../../.github/workflows/ci.yml)
-- 探针使用的 `electron.exe` SHA-256 为 `0fafe52005be7e9fa67b5e068d57b38abd63ce24abdaa897113a0c3764f8a363`。
+- 在现代 Windows x64 `10.0.26300` 运行 `npm ci --no-audit --no-fund`（Node `22.21.0`、npm `10.9.4`）及 `npm run build:all` 成功。构建覆盖两个主机 Rust 组件，CLI 可输出版本和帮助。
+- 上游 CLI 全套测试首次得到 536 通过、30 失败、25 跳过，另有命名管道占用异常。可见的失败包括路径断言、符号链接权限、MCP 超时和缺少生成的 XLSX 测试样本。生成 Sheets 样本后，重跑 `tests/cli.test.ts` 和 `tests/errors.test.ts`，18 项全部通过。其余失败待复核。[上游 CI 配置](../../.github/workflows/ci.yml)
+- 官方 Electron `43.8.10` 在现代 Windows 的探针运行返回 0，五项均通过。`electron.exe` SHA-256 为 `0fafe52005be7e9fa67b5e068d57b38abd63ce24abdaa897113a0c3764f8a363`。[探针覆盖范围](runtime-test.md)
+- 原版 Office 渲染的五个子用例通过，包含 DOCX、XLSX 和 PPTX 渲染、`slides render`、越界页码错误及中间 PDF 清理。[实验记录](evidence/render-baseline-windows-x64.json)
