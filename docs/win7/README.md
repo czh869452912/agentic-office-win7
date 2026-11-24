@@ -12,5 +12,6 @@
 | 实施入口、实验及验证顺序                         | [实施评估](implementation-assessment.md)                     |
 | 可复现实验结果                                   | [Office 渲染基线](evidence/render-baseline-windows-x64.json) |
 | Win7 运行时对照步骤                              | [Electron 探针](runtime-test.md)                             |
+| Docker 启动 Win7 与客体取证                      | [Docker 验证环境](docker-lab.md)                             |
 
 新增实现时，在实施台账引用对应的 W、F 和验收 ID，注明依赖与可复现的验收方法。验收执行后，将记录与原始证据关联，再更新工作项状态。范围、发布条件或运行时路线发生变更时，将决定、依据、影响范围和验证方式随 Git 变更保存。方案中的估时和建议样本数量按目标终端实测校准。

@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-24",
+  "upstreamSha": "99865c27f685f1e7f40d6df273545db8ea86aa17",
+  "scenario": "stock",
+  "environment": {
+    "dockerEngine": "29.7.2",
+    "wslKernel": "6.6.87.2-microsoft-standard-WSL2",
+    "qemu": "11.1.1",
+    "kvm": true,
+    "storage": "Docker named volume (ext4)",
+    "dockurImage": "docker.io/dockurr/windows@sha256:16fd7c39a3e48bb946d29c59dc6015942e5b900a1fa5d7e5552053bfc48ee2ea",
+    "isoSource": "https://files.dog/MSDN/Windows%207/en_windows_7_ultimate_with_sp1_x64_dvd_u_677332.iso",
+    "isoSha256": "36f4fa2416d0982697ab106e3a72d2e120dbcdb6cc54fd3906d06120d0653808",
+    "isoVerification": "SHA-256 from the pinned Dockur image",
+    "guestOs": "Windows 7 Ultimate SP1",
+    "guestBuild": "6.1.7601",
+    "guestArch": "x64",
+    "powershell": "2.0",
+    "hotfixes": ["KB2534111", "KB976902"]
+  },
+  "electron": {
+    "version": "43.8.10",
+    "arch": "AMD64",
+    "sha256": "0fafe52005be7e9fa67b5e068d57b38abd63ce24abdaa897113a0c3764f8a363",
+    "requiredOsVersion": "10.0",
+    "subsystemVersion": "10.0"
+  },
+  "results": [
+    {
+      "testId": "RT01",
+      "caseId": "guest-command-control",
+      "status": "pass",
+      "processCreated": true,
+      "exitCode": 0
+    },
+    {
+      "testId": "RT01",
+      "caseId": "official-electron",
+      "status": "fail",
+      "processCreated": false,
+      "win32Error": 193,
+      "probeJsonProduced": false
+    },
+    {
+      "testId": "RT01",
+      "caseId": "diagnostic-pe-header-copy",
+      "status": "fail",
+      "processCreated": true,
+      "exitCodeHex": "0xC0000139",
+      "change": "OS and subsystem versions 10.0 to 6.1 on a disposable copy of electron.exe"
+    },
+    {
+      "testId": "RT01",
+      "caseId": "kernel32-import-availability",
+      "status": "fail",
+      "presentControl": "GetTickCount64",
+      "missing": [
+        "DiscardVirtualMemory",
+        "GetPackageFamilyName",
+        "GetSystemTimePreciseAsFileTime",
+        "GetProcessMitigationPolicy",
+        "SetProcessMitigationPolicy"
+      ]
+    },
+    {
+      "testId": "RT02–RT09",
+      "status": "blocked",
+      "reason": "The original Electron process could not be created."
+    }
+  ]
+}
