@@ -19,7 +19,7 @@ node compat/scripts/render-baseline.mjs
 
 ## W01 运行时验证
 
-用相同的 Electron 解包目录、探针和证据字段，在 Win7 SP1 x64 的干净快照先做启动对照。记录 Win7 补丁、显示驱动、退出码和加载器事件。需要兼容配置时，从同一快照单独测配置方案，每次只改变一个兼容条件。依据 RT01–RT09 的结果决定继续现有运行时、验证局部补丁或重估移植路线。[运行步骤](runtime-test.md) · [门禁](acceptance.md#运行时门禁)
+原版 Electron 43.8.10 已在 Docker 的 Win7 SP1 x64 上完成启动对照。RT01 在进程创建及导入解析阶段失败。后续使用独立客体副本，依次对照目标系统补丁和兼容层候选。[实测证据](evidence/docker-win7-stock.json) · [后续开发计划](development-roadmap.md)
 
 ## W02 PDF profile 的实施切片
 
