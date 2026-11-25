@@ -12,7 +12,13 @@
 
 在 VxKex 的 RunAsNode 模式中，以 `XLSX_SIDECAR_PATH` 指向新 Sidecar。原样本成功读元数据并完成数值写入及重新打开。公式对照先向样本副本的 `xl/styles.xml` 加入 Normal `cellStyle`，再执行 `info`、`sheet apply` 和 `sheet read`。写入 `B2=4321` 与 `C2==B2*2` 后，重新打开文件得到 4321 和 8642，并读回公式文本。输入摘要一致，输出归档通过 CRC 检查，无条目增删，内容有变的条目为工作簿和目标工作表 XML。[实验数据](evidence/win7-native-and-sandbox.json)
 
-缺少 `cellStyles` 的原样本写入公式后无法重算。相同输出在现代 Windows 上由原版 Sidecar 复现，IronCalc 0.9.1 导入器在 `styles.rs:309` 抛出索引越界。这个用例保留为公式兼容性失败。带完整样式元数据的对照用例通过。[IronCalc 导入器](https://docs.rs/crate/ironcalc/0.9.1/source/src/import/styles.rs)
+修复前，缺少 `cellStyles` 的原样本写入公式后无法重算。相同输出在现代 Windows 上由原版 Sidecar 复现，IronCalc 0.9.1 导入器在 `styles.rs:309` 抛出索引越界。带完整样式元数据的对照用例通过。[IronCalc 导入器](https://docs.rs/crate/ironcalc/0.9.1/source/src/import/styles.rs)
+
+### 2026-11-25 原样本公式回归（W03、F03、T04、T07）
+
+Sidecar 现在复用 IronCalc 的导入前兼容处理，在内存副本中为缺少 `cellStyles` 的样式表补入空节点。用固定的 Win7 Rust 工具链重建后，在同一个补丁与 VxKex 客体上，用 Electron RunAsNode 和 CLI 的 `runCli` 对原始 `compatibility-basic.xlsx` 执行 `info`、`sheet apply` 和 `sheet read`。写入 `B2=4321` 和 `C2` 的公式 `=B2*2`，再从输出文件读回 `4321`、`8642` 及原公式。三个命令均返回 0，`sheet apply` 报告 `cached_values: true`。[SpreadsheetML 样式表](https://learn.microsoft.com/dotnet/api/documentformat.openxml.spreadsheet.stylesheet) · [本轮证据](evidence/win7-xlsx-formula-regression.json)
+
+输入文件的 SHA-256 一致，输入和输出各有 14 个 ZIP 条目，均通过 CRC 校验。内容变化仅出现在 `xl/workbook.xml` 与 `xl/worksheets/sheet1.xml`。`xl/styles.xml` 保持字节一致，工作表 XML 含 `<f>B2*2</f><v>8642</v>`。该记录覆盖 T04 的公式缓存和 T07 的单样本 OOXML 保留子项。[回归用例](../../packages/cli/tests/xlsx-recalc-dependents.test.ts)
 
 ## MCP HTTP
 

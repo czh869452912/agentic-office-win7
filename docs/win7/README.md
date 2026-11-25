@@ -1,6 +1,6 @@
 # Win7 兼容项目
 
-目标平台为 Windows 7 SP1 x64。当前处于实施评估阶段，Win7 运行时和可发布安装包仍待验证。
+目标平台为 Windows 7 SP1 x64。桌面候选包已在 Win7 虚拟机启动并通过基本编辑保存和 PNG 渲染。正式安装包仍待验收。
 
 | 内容                                             | 维护位置                                                     |
 | ------------------------------------------------ | ------------------------------------------------------------ |
@@ -13,6 +13,7 @@
 | 实测后的优先级和运行时路线决策条件               | [后续开发计划](development-roadmap.md)                       |
 | 系统补丁、VxKex 与 CLI 实测                      | [运行时路线验证](runtime-route-validation.md)                |
 | Electron 沙箱异常与 XLSX、EMF 复测               | [桌面与原生组件复测](native-and-sandbox-validation.md)       |
+| Win7 桌面候选构建、真实编辑与渲染结果             | [桌面候选实测](desktop-candidate.md)                         |
 | 可复现实验结果                                   | [Office 渲染基线](evidence/render-baseline-windows-x64.json) |
 | Win7 运行时对照步骤                              | [Electron 探针](runtime-test.md)                             |
 | Docker 启动 Win7 与客体取证                      | [Docker 验证环境](docker-lab.md)                             |

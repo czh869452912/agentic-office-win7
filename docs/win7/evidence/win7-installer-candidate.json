@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-25",
+  "upstreamSha": "99865c27f685f1e7f40d6df273545db8ea86aa17",
+  "environment": "C installer prototype",
+  "guest": "Windows 7 Ultimate SP1 x64 6.1.7601",
+  "appVersion": "0.13.0",
+  "profile": "Win7 lab desktop with all editor modules and without Windows OCR helper",
+  "installer": {
+    "name": "GenOffice-Win7-x64-Lab-0.13.0-Setup.exe",
+    "target": "NSIS x64",
+    "bytes": 176524801,
+    "sha256": "349cb2c3f5777933cfefdc6d27f1105be72d1a64d48b2cccd22df75e74a9ffc4",
+    "authenticodeStatus": "NotSigned"
+  },
+  "runtime": "Community Electron 44.2.0, direct executable launch",
+  "installedExeSha256": "01a5ac2139d2408af0067f843c15f0049656fe20b32351e132e175d31af77687",
+  "fixtureSha256": "3c4c44595422ae486c85307f6cbc6bb2c1bad439577cd608dce93c32ab87b442",
+  "testId": "T17",
+  "checks": {
+    "guestExternalRoutingBlocked": true,
+    "cleanInstallExitCode": 0,
+    "sameVersionReinstallExitCode": 0,
+    "installedDesktopWindow": true,
+    "installedCliReadDocx": true,
+    "userCliPathRegisteredAndRemoved": true,
+    "uninstallExitCode": 0,
+    "installedExecutableRemoved": true,
+    "externalDocumentSha256Preserved": true,
+    "testSettingsSha256Preserved": true
+  },
+  "status": "pass",
+  "scope": "T17 silent per-user setup and removal subcases in the VM, with a local share available for evidence collection"
+}

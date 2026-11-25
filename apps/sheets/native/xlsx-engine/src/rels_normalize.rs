@@ -1,4 +1,4 @@
-//! Normalizes OPC relationship targets before the IronCalc import.
+//! Normalizes OPC relationship targets and optional styles before the IronCalc import.
 //!
 //! IronCalc 0.9.1 resolves a worksheet's comments and table relationships by
 //! assuming a relative target that begins with `../` (`load_sheet_rels` in
@@ -11,9 +11,10 @@
 //! IronCalc is an external crate, so the repair stays on our side of the
 //! import boundary: a package that uses absolute targets is copied in memory
 //! with those targets rewritten to the equivalent relative form and imported
-//! from those bytes. A package whose targets are all relative keeps the plain
-//! path import — no copy, no behavior change, just the small `.rels` parts
-//! read to prove the fixup is unnecessary.
+//! from those bytes. IronCalc also assumes `cellStyles` is present, even
+//! though SpreadsheetML permits omitting it. The same temporary copy can
+//! supply an empty element without adding named styles to the workbook.
+//! Packages that need neither fixup keep the plain path import.
 
 use std::collections::HashMap;
 use std::fs::File;
@@ -35,8 +36,8 @@ use crate::xml_util::{MAX_METADATA_PART_BYTES, copy_entry_bounded};
 const RELATIONSHIPS_NAMESPACE: &str =
     "http://schemas.openxmlformats.org/package/2006/relationships";
 
-/// Imports the workbook at `path` into an IronCalc model, repairing absolute
-/// relationship targets first when the package uses them.
+/// Imports the workbook at `path` into an IronCalc model with any required
+/// compatibility fixups applied to a temporary copy.
 pub(crate) fn load_model(path: &Path) -> Result<Model<'static>, SidecarError> {
     let Some(normalized) = normalized_package(path)? else {
         let path_text = path.to_str().ok_or_else(|| {
@@ -68,40 +69,68 @@ struct RelationshipPart {
     source: String,
 }
 
-/// The package with absolute relationship targets rewritten, or `None` when
-/// every target is already relative and the original file can be imported
-/// as is.
+/// The import-only package with compatibility fixups, or `None` when the
+/// original file can be imported as is.
 fn normalized_package(path: &Path) -> Result<Option<Vec<u8>>, SidecarError> {
     let file = File::open(path)?;
     let mut archive = ZipArchive::new(file)?;
+    let mut rewrites: HashMap<usize, String> = HashMap::new();
+    if let Some(index) = archive.index_for_name("xl/styles.xml") {
+        let xml = read_part(&mut archive, index)?;
+        if let Some(rewritten) = add_missing_cell_styles(&xml) {
+            rewrites.insert(index, rewritten);
+        }
+    }
+
     let parts = relationship_parts(&mut archive)?;
-    let mut needs_normalization = false;
+    let mut has_absolute_targets = false;
     for part in &parts {
         let xml = read_part(&mut archive, part.index)?;
         if has_absolute_target(&xml) {
-            needs_normalization = true;
+            has_absolute_targets = true;
             break;
         }
     }
-    if !needs_normalization {
-        return Ok(None);
-    }
-    // Every part is rewritten in one pass, not just the ones that carry an
-    // absolute target: the copy is handed to the importer wholesale, so this
-    // is the one place that can report a dangling relationship part by name.
-    let mut rewrites: HashMap<usize, String> = HashMap::new();
-    for part in &parts {
-        let xml = read_part(&mut archive, part.index)?;
-        if let Some(rewritten) = rewrite_part(&xml, part, &mut archive)? {
-            rewrites.insert(part.index, rewritten);
+    if has_absolute_targets {
+        for part in &parts {
+            let xml = read_part(&mut archive, part.index)?;
+            if let Some(rewritten) = rewrite_part(&xml, part, &mut archive)? {
+                rewrites.insert(part.index, rewritten);
+            }
         }
     }
     if rewrites.is_empty() {
-        // Detection promised at least one absolute target; if resolution
-        // rejected it there is nothing to hand over differently.
         return Ok(None);
     }
     write_package(&mut archive, &rewrites).map(Some)
+}
+
+fn add_missing_cell_styles(xml: &str) -> Option<String> {
+    let document = Document::parse(xml).ok()?;
+    let root = document.root_element();
+    let namespace = root.tag_name().namespace()?;
+    if !matches!(
+        namespace,
+        "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+            | "http://purl.oclc.org/ooxml/spreadsheetml/main"
+    ) || !root.has_tag_name("styleSheet")
+        || root
+            .children()
+            .any(|node| node.has_tag_name((namespace, "cellStyles")))
+    {
+        return None;
+    }
+
+    let formats = root
+        .children()
+        .find(|node| node.has_tag_name((namespace, "cellXfs")))?;
+    let mut rewritten = xml.to_owned();
+    // IronCalc only requires the container. Preserve the source's lack of named styles.
+    rewritten.insert_str(
+        formats.range().end,
+        &format!(r#"<cellStyles xmlns="{namespace}"/>"#),
+    );
+    Some(rewritten)
 }
 
 fn relationship_parts(
@@ -327,10 +356,9 @@ fn relative_target(source_part: &str, target: &str) -> String {
     relative
 }
 
-/// Writes the source package with the planned relationship parts replaced.
+/// Writes the source package with the planned parts replaced.
 /// Every other entry is copied as its original compressed bytes, so media and
-/// worksheet parts are not inflated and recompressed for a fixup that touches
-/// relations only.
+/// worksheet parts are not inflated and recompressed for these fixups.
 fn write_package(
     archive: &mut ZipArchive<File>,
     rewrites: &HashMap<usize, String>,

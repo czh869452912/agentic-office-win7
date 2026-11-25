@@ -1,0 +1,94 @@
+{
+  "date": "2026-11-25",
+  "upstreamSha": "99865c27f685f1e7f40d6df273545db8ea86aa17",
+  "environment": "C runtime and unpacked desktop candidate",
+  "guest": "Windows 7 Ultimate SP1 x64 6.1.7601",
+  "appVersion": "0.13.0",
+  "profile": "Win7 lab desktop with all editor modules and without Windows OCR helper",
+  "runtime": {
+    "release": "https://github.com/e3kskoy7wqk/Electron-for-windows-7/releases/tag/v44.2.0",
+    "launch": "direct executable launch with default sandbox settings",
+    "electron": "44.2.0",
+    "chromium": "152.0.7977.76",
+    "node": "24.20.0",
+    "archiveSha256": "c50ba2c10c87331ab961f60569e4d906c8514921ac17e138fd0da21ee4ddb2b1",
+    "electronSha256": "33a06ac72cfb9d923f6c968028036cbe7fa0de435ab3040669d4c07d317d1365",
+    "packagedExeSha256": "01a5ac2139d2408af0067f843c15f0049656fe20b32351e132e175d31af77687",
+    "asarSha256": "3d6a4ada31b17f2850d17f9b2eaf25c238981ce562f8c013b04684a1418636f3"
+  },
+  "runtimeChecks": [
+    { "testId": "RT01", "case": "Start runtime and package, match version", "status": "pass" },
+    { "testId": "RT02", "case": "SQLite insert and query", "status": "pass" },
+    { "testId": "RT03", "case": "Load five WebContentsViews", "status": "pass" },
+    {
+      "testId": "RT04",
+      "case": "Renderer preload reports isolation and a scoped IPC call succeeds",
+      "actual": {
+        "sandboxed": true,
+        "contextIsolated": true,
+        "nodeGlobals": false,
+        "reply": "pong"
+      },
+      "status": "pass"
+    },
+    { "testId": "RT06", "case": "Hidden-window print emits PDF", "bytes": 15161, "status": "pass" }
+  ],
+  "startup": {
+    "testId": "T02",
+    "case": "Open sample files in all six editor modules in the same shell",
+    "formats": ["docx", "xlsx", "pptx", "md", "html", "pdf"],
+    "status": "pass"
+  },
+  "editorChecks": [
+    {
+      "testId": "T03",
+      "file": "simple.docx",
+      "fixtureSha256": "3c4c44595422ae486c85307f6cbc6bb2c1bad439577cd608dce93c32ab87b442",
+      "savedSha256": "4e4d5f2e484dc7603eefd96262262e238cee5d00407fac46a3526d3290f740ae",
+      "actual": "Appended Win7DocSave, verified in word/document.xml and visible after app restart",
+      "status": "pass"
+    },
+    {
+      "testId": "T04",
+      "file": "compatibility-basic.xlsx",
+      "fixtureSha256": "c6e717d127cbe9bb6f22c201213e655dd72713ddf14074a7235ff7d454155552",
+      "savedSha256": "77c70433bd2be5c663c111008cf4b0c12d88fc038875e966cf4b69b8d7e8337c",
+      "actual": "Edited A1 through the worksheet UI and verified saved text and original value 10",
+      "status": "pass"
+    },
+    {
+      "testId": "T05",
+      "file": "01_standard_business.pptx",
+      "fixtureSha256": "faddc03270215218e78720f1c8f6e3aa862891a432f71e7ec9f3d13ea7902048",
+      "savedSha256": "85a47a85e98e5e08374b191fd945d4cdaf55dde315ddbe9aacf08e5fa2ac91a7",
+      "actual": "Inserted a slide, then verified six slide IDs in ppt/presentation.xml",
+      "status": "pass"
+    }
+  ],
+  "outputChecks": {
+    "T07": { "case": "Each of the three saved OOXML packages passes ZIP CRC", "status": "pass" },
+    "T08": {
+      "case": "Reopen each saved file through the packaged CLI renderer, verify PNG headers and PDF cleanup",
+      "output": [
+        { "format": "docx", "pages": 1, "width": 596, "height": 842, "exit": 0 },
+        { "format": "xlsx", "pages": 1, "width": 595, "height": 842, "exit": 0 },
+        { "format": "pptx", "pages": 6, "width": 960, "height": 540, "exit": 0 }
+      ],
+      "remainingTemporaryPdfs": 0,
+      "status": "pass"
+    }
+  },
+  "mcpStdio": {
+    "testId": "T11",
+    "protocolVersion": "2025-03-26",
+    "toolCount": 32,
+    "call": "info",
+    "worksheet": "Sheet1",
+    "exitAfterStdinClosed": 0,
+    "status": "pass"
+  },
+  "observations": [
+    "Guest Chromium logs showed EGL and SwiftShader initialization errors and a missing msvproc.dll for DXVA video decoding.",
+    "The app restarted in a fresh profile with the three saved files and without a remote debugging switch."
+  ]
+}

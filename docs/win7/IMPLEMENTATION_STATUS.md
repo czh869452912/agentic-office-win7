@@ -5,12 +5,12 @@
 | 工作项                  | 阶段   | 状态                                 | 依赖与下一项可验证交付                                                                                                                            |
 | ----------------------- | ------ | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | W00 基线冻结            | P0     | 源码已锁定，A 组对照进行中           | 原版构建通过，T08 渲染子用例已留证。继续核对参数级能力和原版 Windows CLI 差异。                                                                   |
-| W01 Electron 探针       | P1     | 桌面 RT01 失败，Node/SQLite 子项通过 | 完成原始、补丁及 VxKex 客体对照。桌面初始化仍受阻。[验证报告](runtime-route-validation.md)                                                        |
-| W02 PDF profile         | P2     | 实施评估中                           | A 组 T08 渲染子用例已通过。先验证内部 PNG 请求，再实现面向 T08、T13–T15 的 B 组切片。[实施评估](implementation-assessment.md)                     |
-| W03 Win7 原生组件       | P3     | Sidecar 和 EMF 基础用例通过          | 两个 Win7 目标构建通过，验证了 XLSX 数值和公式对照往返及 EMF 剪贴板。缺少 cellStyles 的公式用例失败。[复测记录](native-and-sandbox-validation.md) |
-| W04 CLI、MCP 与内网模型 | P3、P5 | CLI 基础往返与 MCP HTTP 子项通过     | Win7 .NET 客户端已完成令牌、会话、工具发现和 XLSX 读取。Node 回环连接与 stdio 待验证。[复测记录](native-and-sandbox-validation.md)                |
-| W05 运行时路线决策      | P1、P4 | 桌面异常定位到沙箱初始化             | 已取得匹配符号的首个异常栈，桌面 RT01 仍失败。CLI 已用 Win7 Sidecar 通过工作簿基础往返。[复测记录](native-and-sandbox-validation.md)              |
-| W06 离线交付与验收      | P5、P6 | 待集成                               | 依赖 W01–W05 的候选结果。验证 B/C 安装包及支持矩阵，执行 T01–T19 并发出验收报告。                                                                 |
+| W01 Electron 探针       | P1     | 44.2.0 社区候选启动通过              | Win7 探针通过 SQLite、五个 View、Renderer 基本隔离与隐藏窗口打印。继续验证 RT02–RT09 余项。[桌面实测](desktop-candidate.md) |
+| W02 PDF profile         | P2     | A 组和 Win7 候选的 PNG 子项通过       | DOCX、XLSX、PPTX 已在 Win7 候选包验证内部 PNG 渲染。继续实现产品裁剪及 T13–T15。[桌面实测](desktop-candidate.md) |
+| W03 Win7 原生组件       | P3     | Sidecar 和 EMF 基础用例通过          | 两个 Win7 目标构建通过。原始 XLSX 样本的公式缓存回归通过，后续覆盖复杂工作簿及应用内 EMF。[复测记录](native-and-sandbox-validation.md) |
+| W04 CLI、MCP 与内网模型 | P3、P5 | MCP HTTP 与 stdio 子项通过           | 此前 Win7 .NET 客户端通过 HTTP 基本用例。桌面候选包通过 stdio 初始化、发现、XLSX 调用及退出。继续验证内网模型和传输异常。[桌面实测](desktop-candidate.md) |
+| W05 运行时路线决策      | P1、P4 | 社区移植版进入桌面测试               | 固定社区 Electron 44.2.0 与 Win7 原生组件，六个编辑器加载成功，三种 OOXML 格式完成编辑保存。继续核验补丁和正式发行条件。[桌面实测](desktop-candidate.md) |
+| W06 离线交付与验收      | P5、P6 | Win7 测试包离线安装和卸载通过       | 已生成 NSIS x64 候选并通过部分 T17。剩余产品能力裁剪、签名、跨版本升级回滚、物理终端对照及 T01–T19 验收。[安装实测](desktop-candidate.md#win7-x64-安装候选) |
 
 ## 已有证据
 

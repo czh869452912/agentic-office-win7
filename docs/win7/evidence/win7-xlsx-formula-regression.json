@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-25",
+  "upstreamSha": "99865c27f685f1e7f40d6df273545db8ea86aa17",
+  "workItem": "W03",
+  "feature": "F03",
+  "profile": "Win7 CLI and Sidecar prototype",
+  "environment": "C runtime prototype",
+  "guest": "Windows 7 Ultimate SP1 x64 6.1.7601",
+  "launcher": "VxKexLdr with ELECTRON_RUN_AS_NODE=1 and bundled runCli",
+  "vxKex": "1.2.2.2316",
+  "electron": "43.8.10",
+  "electronSha256": "0fafe52005be7e9fa67b5e068d57b38abd63ce24abdaa897113a0c3764f8a363",
+  "node": "24.22.1",
+  "cliSha256": "42fb0f22bbeedd1ceed1c17e66d7ff3196096ec4bb05802f3b9fca026cf91794",
+  "sidecar": {
+    "target": "x86_64-win7-windows-msvc",
+    "toolchain": "nightly-2026-03-26",
+    "sha256": "30bf7b23995bbf2bedfa744bf2fb6496fdaba5f104956c3e222f13215bdd6764",
+    "openProtocol": 1,
+    "openExitCode": 0
+  },
+  "fixture": "apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+  "fixtureSha256": "c6e717d127cbe9bb6f22c201213e655dd72713ddf14074a7235ff7d454155552",
+  "outputSha256": "2539c09e55aaa8ad82568716bf983d4c01b072a25fdbefa4f9ffeef2a5538ff7",
+  "checks": [
+    {
+      "testId": "T04",
+      "case": "Cache and reopen a formula in a workbook without cellStyles",
+      "expected": "Sheet1!B2:C2 contains 4321 and 8642 with C2 formula =B2*2 and a saved cache",
+      "actual": {
+        "infoExitCode": 0,
+        "applyExitCode": 0,
+        "readExitCode": 0,
+        "cachedValues": true,
+        "rows": [[4321, 8642]],
+        "formulas": { "C2": "=B2*2" }
+      },
+      "status": "pass"
+    },
+    {
+      "testId": "T07",
+      "case": "Preserve the source workbook and unrelated output parts",
+      "expected": "Input digest and the output part list match the source, and styles.xml is byte-identical",
+      "actual": {
+        "inputUnchanged": true,
+        "zipCrcValid": true,
+        "zipEntries": 14,
+        "changedParts": ["xl/workbook.xml", "xl/worksheets/sheet1.xml"],
+        "stylesUnchanged": true,
+        "formulaCacheWritten": true
+      },
+      "status": "pass"
+    }
+  ]
+}

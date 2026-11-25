@@ -101,6 +101,39 @@ async function createWorkbook(dir: string, name: string, table: unknown): Promis
 }
 
 describe('sheet apply refreshes dependent formula caches (#2304)', () => {
+  it.skipIf(!sidecar)('caches formulas in a workbook without named cell styles', async () => {
+    const dir = tempDir()
+    const input = await createWorkbook(dir, 'unnamed-styles', [[3]])
+    await rewritePart(input, 'xl/styles.xml', (xml) =>
+      xml.replace(/<cellStyles\b[^>]*>[\s\S]*?<\/cellStyles>/, ''),
+    )
+    const original = readFileSync(input)
+    const originalStyles = await sheetPart(input, 'xl/styles.xml')
+    expect(originalStyles).not.toContain('<cellStyles')
+    const cells = applyInput(dir, 'cells', [{ cell: 'B1', formula: '=A1*2' }])
+    const output = join(dir, 'result.xlsx')
+
+    const applied = await run([
+      'sheet',
+      'apply',
+      input,
+      '--cells',
+      cells,
+      '--out',
+      output,
+      '--json',
+    ])
+    expect(applied.code).toBe(0)
+    expect(applied.json().detail.cached_values).toBe(true)
+    expect(await sheetPart(output)).toMatch(/<f>A1\*2<\/f><v>6<\/v>/)
+    expect(await sheetPart(output, 'xl/styles.xml')).toBe(originalStyles)
+    expect(readFileSync(input).equals(original)).toBe(true)
+
+    const read = await run(['sheet', 'read', output, '--range', 'A1:B1', '--json'])
+    expect(read.code).toBe(0)
+    expect(read.json().detail.rows).toEqual([[3, 6]])
+  })
+
   it.skipIf(!sidecar)('recalculates a dependent formula after a --cells value edit', async () => {
     const dir = tempDir()
     const out = await issueWorkbook(dir)
